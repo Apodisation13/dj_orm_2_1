@@ -7,7 +7,7 @@ class Article(models.Model):
     text = models.TextField(verbose_name='Текст')
     published_at = models.DateTimeField(verbose_name='Дата публикации')
     image = models.ImageField(null=True, blank=True, verbose_name='Изображение',)
-    tags = models.ManyToManyField('Tag', through='TagThrough')
+    tags = models.ManyToManyField('Tag', through='TagThrough', related_name='tagsss')
 
     class Meta:
         verbose_name = 'Статья'
@@ -32,9 +32,11 @@ class Tag(models.Model):
 
 class TagThrough(models.Model):
 
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name='Тэг')
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Статья')
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name='Тэг', related_name='t1')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Статья', related_name='t1')
+    is_main = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Тэг'
         verbose_name_plural = 'Тэги'
+        ordering = ['-is_main', 'tag']
